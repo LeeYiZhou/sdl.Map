@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,10 +75,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         locationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        request = new LocationRequest();
-        request.setInterval(10000L);
-        request.setFastestInterval(5000L);
-        request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        Button relocateButton = findViewById(R.id.relocate_button);
+        relocateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG,"relocate button clicked");
+                request = new LocationRequest();
+                request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                request.setExpirationDuration(1000L);
+                locationClient.requestLocationUpdates(request, callback, null);
+            }
+        });
 
         callback = new LocationCallback() {
             @Override
